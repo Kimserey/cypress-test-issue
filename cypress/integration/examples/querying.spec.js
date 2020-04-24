@@ -9,7 +9,17 @@ context('Querying', () => {
     let x = [...Array(100).keys()].map(x => x + "");
 
     cy.server()
-        .route('/test', x)
+        .route({
+            method: 'POST',
+            url: '/api/logout',
+            status: 200,
+            response: {},
+            headers: {
+              'set-cookie': 'csrf_access_token='
+            }
+        });
+
+    cy.get('[data-cy=logoutButton]').click();
 
     cy.get('[data-cy=landmark]').invoke('text').should('contain', 'Welcome')
   })
